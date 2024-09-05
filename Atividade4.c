@@ -16,8 +16,8 @@ int main (){
         media = soma / n;
     }
 
-    printf ("A soma eh: %f", soma);
-    printf ("\nA media eh: %f", media);
+    printf ("A soma eh: %.2f", soma);
+    printf ("\nA media eh: %.2f", media);
 
     return 0;
 }
