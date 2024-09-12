@@ -5,11 +5,12 @@ O saque podera somente ser realizado se tivaer saldo na conta
 
 # include <stdio.h>
 # include <stdlib.h>
+#include <string.h>
 
 const int nr_agencia = 1070, nr_conta = 121, nr_senha = 1007;
 float saldo = 0.0, limite = 500.00;
 float operacao_credito [100], operacao_debito [100];
-int voltar;
+int voltar, total_credito = 0, total_debito = 0;
 
 void preenche_vetor (){
 
@@ -33,12 +34,62 @@ void consulta_saldo (){
     chama_menu ();
 }
 
-void realizar_saque (){
-
-    float num;
+void realizar_deposito(float *saldo) {
     
-    printf ("Qual o valor voce deseja sacar? ");
-    scanf ("%f", &num);
+    float num;
+
+    printf("Informe o valor que voce deseja depositar: ");
+    scanf("%f", &num);
+
+    *saldo += num;
+    
+    if (total_credito < 100) {
+        operacao_credito[total_credito++] = num;
+    } 
+    else {
+        printf("Histórico de crédito cheio.\n");
+    }
+}
+
+void realizar_saque(float *saldo) {
+    
+    float valor_saque;
+
+    printf("Entre com o valor que voce deseja sacar: ");
+    scanf("%f", &valor_saque);
+
+    if (valor_saque <= *saldo) {
+        
+        *saldo -= valor_saque;
+        
+        if (total_debito < 100) {
+            operacao_debito[total_debito++] = valor_saque;
+        } else {
+            printf("Histórico de débito cheio.\n");
+        }
+    } else {
+        printf("Saldo insuficiente para o saque.\n");
+    }
+}
+
+void consultar_extrato(){
+  
+    int i;
+
+    printf("\nExtrato Bancário Digital:\n");
+    printf("\nOperações de Crédito:\n");
+
+    for (int i = 0; i < total_credito; i++) {
+        printf("Depósito: %.2f\n", operacao_credito[i]);
+    }
+
+    printf("\nOperações de Débito:\n");
+    
+    for (int i = 0; i < total_debito; i++) {
+        printf("Saque: %.2f\n", operacao_debito[i]);
+    }
+
+    printf("\nSaldo Final: %.2f\n", saldo);
 }
 
 void chama_menu (){
